@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     // }
 
     getcwd(base_path, sizeof(base_path));
-    printf("\nbase path\n%s\n\n", base_path);
+    // printf("\nbase path\n%s\n\n", base_path);
 
     if (argv[1][0] == '*') {
         option_wd();
