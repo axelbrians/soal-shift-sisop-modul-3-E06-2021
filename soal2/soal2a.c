@@ -9,8 +9,8 @@
 #define y 3
 #define z 6
 
-const int matrixa[x][y] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
-const int matrixb[y][z] = {{1, 2, 3, 4, 5, 6}, {7, 8, 9, 10, 11, 12}, {13, 14, 15, 16, 17, 18}};
+int matrixa[x][y];
+int matrixb[y][z];
 int hasil[x][z];
 
 pthread_t tid[x*z];
@@ -45,6 +45,13 @@ int main(void){
 	
 	int shmid = shmget(key, sizeof(matrix_hasil), IPC_CREAT | 0666);
 	matrix_hasil = shmat(shmid, 0, 0);
+
+	for(int i=1;i<=4;i++)
+		for(int j=1;j<=3;j++)
+			scanf("%d",&matrixa[i][j]);
+	for(int i=1;i<=3;i++)
+		for(int j=1;j<=6;j++)
+			scanf("%d",&matrixb[i][j]);
 
 	for(int i=1; i<x+1; i++){
 		for(int j=1; j<z+1; j++){

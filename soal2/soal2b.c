@@ -20,8 +20,13 @@ struct argue{
 	int arg1;
 	int arg2;
 };
-
-
+unsigned long long factorial(int a){
+	unsigned long long ret=1;
+	for(int i=1;i<=a;i++){
+		ret*=1LL*i;
+	}
+	return ret;
+}
 void *hitung(void *arguments){
 	struct argue *args = arguments;
 
@@ -32,13 +37,9 @@ void *hitung(void *arguments){
 	if(d1==0 || d2==0){
 		temp = 0;
 	}else if(d1>=d2){
-		for(int i=d1-d2;i<=d1;i++){
-			temp *= 1LL*i;
-		}
+		temp = factorial(d1)/factorial(d1-d2);
 	}else{
-		for(int i=1;i<=d1;i++){
-			temp *= 1LL*i;
-		}
+		temp = factorial(d1);
 	}
 	printf("%llu\t", temp);
 	pthread_exit(0);

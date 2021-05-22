@@ -5,62 +5,81 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <wait.h>
-int main() {
-	int status;
-	pid_t pid;
-	int pipe1[2];
-	int pipe2[2];
-
-	if(pipe(pipe1) == -1){
-		exit(EXIT_FAILURE);
+int pid;
+int pipe1[2];
+int pipe2[2];
+int main(){
+	// create pipe1
+	if (pipe(pipe1) == -1) {
+		perror("bad pipe1");
 		exit(1);
 	}
-	if((pid = fork()) == -1){
-		exit(EXIT_FAILURE);
+	// fork (ps aux)
+	if ((pid = fork()) == -1) {
+		perror("bad fork1");
 		exit(1);
-	}else if(pid == 0){
+	}else if (pid == 0) {
+		// input from stdin
+		// output to pipe1
 		dup2(pipe1[1], 1);
-
+		// close fds
 		close(pipe1[0]);
 		close(pipe1[1]);
-
-		char *argv[] = {"ps", "aux", NULL};
-        execv("/bin/ps", argv);
-	}
-	if(pipe(pipe2) == -1){
-		exit(EXIT_FAILURE);
+		// exec
+		execlp("ps", "ps", "aux", NULL);
+		// exec didn't work, exit
+		perror("bad exec ps");
 		exit(1);
 	}
-	if((pid = fork()) == -1){
-		exit(EXIT_FAILURE);
+	// parent
+	
+	// create pipe2
+	if (pipe(pipe2) == -1) {
+		perror("bad pipe2");
 		exit(1);
-	}else if(pid == 0){
-		while(wait(&status) > 0);
+	}
+	// fork (sort -nrk 3,3)
+	if ((pid = fork()) == -1) {
+		perror("bad fork2");
+		exit(1);
+	} else if (pid == 0) {
+		// input from pipe1
 		dup2(pipe1[0], 0);
+		// output to pipe2
 		dup2(pipe2[1], 1);
-
+		// close fds
 		close(pipe1[0]);
 		close(pipe1[1]);
 		close(pipe2[0]);
 		close(pipe2[1]);
-
-		char *argv[] = {"sort", "-nrk 3,3", NULL};
-        execv("/bin/sort", argv);
+		// exec
+		execlp("sort", "sort", "-nrk 3,3", NULL);
+		// exec didn't work, exit
+		perror("bad exec sort -nrk 3,3");
+		exit(1);
 	}
+	// parent
 
-	if((pid = fork()) == -1){
-		exit(EXIT_FAILURE);
+	// close unused fds
+	close(pipe1[0]);
+	close(pipe1[1]);
+	
+	// fork (head -5)
+	if ((pid = fork()) == -1) {
+		perror("bad fork3");
 		exit(1);
 	}else if (pid == 0){
-		while(wait(&status) > 0);
+		// input from pipe2
 		dup2(pipe2[0], 0);
-
+		// output to stdout (already done)
+		// close fds
 		close(pipe2[0]);
 		close(pipe2[1]);
-
-		char *argv[] = {"head", "-5", NULL};
-        execv("/bin/head", argv);
-		wait(NULL);
+		// exec
+		execlp("head", "head", "-5", NULL);
+		// exec didn't work, exit
+		perror("bad exec head -5");
+		exit(1);
 	}
-	return 0;
+	// parent
 }
