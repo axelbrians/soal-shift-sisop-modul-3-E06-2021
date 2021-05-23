@@ -74,7 +74,7 @@ void option_dir(char *argv[], int option) {
     //printf("=== list of file ===\n");
     for (int i = 2; i < counter + 2; i++) {
         param[i] = &file_col[i];
-        printf("%s\n", param[i]);
+        // printf("%s\n", param[i]);
     }
 
     option_file(counter, param, option);
@@ -292,6 +292,6 @@ void create_dir(void *param) {
     
     int res = mkdir(path, 0755);
     if (res == -1) {
-        fprintf(stderr, "error: Cannot create dir # %s\n", path);
+        // fprintf(stderr, "error: Cannot create dir # %s\n", path);
     }
 }
