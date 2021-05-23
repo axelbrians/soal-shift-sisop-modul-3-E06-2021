@@ -46,11 +46,12 @@ int main(void){
 	int shmid = shmget(key, sizeof(matrix_hasil), IPC_CREAT | 0666);
 	matrix_hasil = shmat(shmid, 0, 0);
 
-	for(int i=1;i<=4;i++)
-		for(int j=1;j<=3;j++)
+
+	for(int i=0;i<=3;i++)
+		for(int j=0;j<=2;j++)
 			scanf("%d",&matrixa[i][j]);
-	for(int i=1;i<=3;i++)
-		for(int j=1;j<=6;j++)
+	for(int i=0;i<=2;i++)
+		for(int j=0;j<=5;j++)
 			scanf("%d",&matrixb[i][j]);
 
 	for(int i=1; i<x+1; i++){

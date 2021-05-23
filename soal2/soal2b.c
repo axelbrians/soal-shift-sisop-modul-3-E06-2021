@@ -27,6 +27,7 @@ unsigned long long factorial(int a){
 	}
 	return ret;
 }
+
 void *hitung(void *arguments){
 	struct argue *args = arguments;
 

@@ -32,7 +32,7 @@ void option_wd();
 void *move_file();
 
 
-// execv function
+// function
 bool is_file_exist();
 bool is_file_type_unknown(void *param);
 int is_directory();
